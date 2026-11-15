@@ -69,15 +69,16 @@ label.field { display: flex; flex-direction: column; gap: 6px; font-size: 13px; 
 input[type="text"], textarea { width: 100%; border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 9px 11px; color: var(--ink); }
 textarea { min-height: 112px; resize: vertical; line-height: 1.55; }
 
-.row3 { display: grid; grid-template-columns: 76px 1fr; gap: 8px 10px; align-items: center; }
-.row3 > span { font-size: 13px; color: var(--muted); }
+.row3 { display: grid; grid-template-columns: 96px 1fr; gap: 8px 10px; align-items: center; }
+.row3 > span { font-size: 13px; color: var(--muted); line-height: 1.25; }
+.row3 .avg { display: block; font-size: 11px; color: var(--accent); }
 .seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
 .seg.two { grid-template-columns: repeat(3, 1fr); }
 .seg[hidden], .cycle-row[hidden] { display: none; }
 details.measure { border: 1px dashed var(--line); border-radius: 8px; padding: 8px 12px; }
 details.measure summary { font-size: 13px; color: var(--accent); font-weight: 600; }
 details.measure[open] { padding-bottom: 12px; }
-.mgrid { display: grid; grid-template-columns: 76px 1fr 44px; gap: 8px 10px; align-items: center; margin-top: 8px; }
+.mgrid { display: grid; grid-template-columns: 76px 1fr 64px; gap: 8px 10px; align-items: center; margin-top: 8px; }
 .mgrid > span { font-size: 13px; color: var(--muted); }
 .mgrid input[type="number"] { width: 100%; border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 6px 9px; color: var(--ink); }
 .mgrid .mout { font-weight: 700; color: var(--accent); font-size: 13px; }
@@ -275,19 +276,23 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
 
     <fieldset>
       <legend><span class="step">1</span>신체 조건</legend>
-      <p class="hint">손 크기와 악력은 같은 성별 평균과 비교해 상·중·하를 고르세요. 평균 근처면 "중"이에요. 직접 잰 값이 있으면 아래 "측정값으로 고르기"에 넣으면 자동으로 골라져요. 구력은 배드민턴을 꾸준히 친 기간이에요.</p>
       <div class="row3">
-        <span>손 크기</span>
-        <div class="seg" role="radiogroup" aria-label="손 크기">
-          <input type="radio" id="hand-l" name="hand" value="하"><label for="hand-l">하</label>
-          <input type="radio" id="hand-m" name="hand" value="중" checked><label for="hand-m">중</label>
-          <input type="radio" id="hand-h" name="hand" value="상"><label for="hand-h">상</label>
+        <span>성별</span>
+        <div class="seg" role="radiogroup" aria-label="성별 (평균 비교용)" style="grid-template-columns:repeat(2,1fr)">
+          <input type="radio" id="sex-m" name="sex" value="남" checked><label for="sex-m">남</label>
+          <input type="radio" id="sex-f" name="sex" value="여"><label for="sex-f">여</label>
         </div>
-        <span>악력</span>
+        <span>손 크기<small class="avg" id="avg-hand"></small></span>
+        <div class="seg" role="radiogroup" aria-label="손 크기">
+          <input type="radio" id="hand-l" name="hand" value="하"><label for="hand-l">작다</label>
+          <input type="radio" id="hand-m" name="hand" value="중" checked><label for="hand-m">평균</label>
+          <input type="radio" id="hand-h" name="hand" value="상"><label for="hand-h">크다</label>
+        </div>
+        <span>악력<small class="avg" id="avg-grip"></small></span>
         <div class="seg" role="radiogroup" aria-label="악력">
-          <input type="radio" id="grip-l" name="grip" value="하" checked><label for="grip-l">하</label>
-          <input type="radio" id="grip-m" name="grip" value="중"><label for="grip-m">중</label>
-          <input type="radio" id="grip-h" name="grip" value="상"><label for="grip-h">상</label>
+          <input type="radio" id="grip-l" name="grip" value="하" checked><label for="grip-l">약하다</label>
+          <input type="radio" id="grip-m" name="grip" value="중"><label for="grip-m">평균</label>
+          <input type="radio" id="grip-h" name="grip" value="상"><label for="grip-h">강하다</label>
         </div>
         <span>구력</span>
         <div class="seg" role="radiogroup" aria-label="배드민턴 구력">
@@ -297,24 +302,12 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
         </div>
       </div>
       <details class="measure" id="measure">
-        <summary>측정값으로 고르기 · 평균과 재는 방법</summary>
+        <summary>직접 잰 값이 있으면 입력 (선택)</summary>
         <div class="mgrid">
-          <span>기준 성별</span>
-          <div class="seg" role="radiogroup" aria-label="비교할 평균의 성별" style="grid-template-columns:repeat(2,1fr)">
-            <input type="radio" id="msex-m" name="msex" value="남" checked><label for="msex-m">남성 평균</label>
-            <input type="radio" id="msex-f" name="msex" value="여"><label for="msex-f">여성 평균</label>
-          </div><span></span>
-          <span>손 길이</span><input type="number" id="m-hand" min="12" max="25" step="0.1" placeholder="cm (예: 18.7)" aria-label="손 길이 cm"><span class="mout" id="m-hand-out"></span>
-          <span></span><select id="m-key" aria-label="키보드 숫자 줄에서 가운뎃손가락 끝이 닿은 키" style="grid-column:2 / 4;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:6px 8px;color:var(--ink)"><option value="">키보드로 재기 (선택)</option><option value="11.9">7 키 왼쪽 절반 → 약 11.9cm</option><option value="12.9">7 키 오른쪽 절반 → 약 12.9cm</option><option value="13.8">8 키 왼쪽 절반 → 약 13.8cm</option><option value="14.8">8 키 오른쪽 절반 → 약 14.8cm</option><option value="15.7">9 키 왼쪽 절반 → 약 15.7cm</option><option value="16.7">9 키 오른쪽 절반 → 약 16.7cm</option><option value="17.6">0 키 왼쪽 절반 → 약 17.6cm</option><option value="18.6">0 키 오른쪽 절반 → 약 18.6cm</option><option value="19.5">- 키 왼쪽 절반 → 약 19.5cm</option><option value="20.5">- 키 오른쪽 절반 → 약 20.5cm</option><option value="21.4">= 키 왼쪽 절반 → 약 21.4cm</option><option value="22.4">= 키 오른쪽 절반 → 약 22.4cm</option><option value="23.5">백스페이스 키까지 → 약 23.5cm 이상</option></select>
-          <span>악력</span><input type="number" id="m-grip" min="5" max="90" step="0.5" placeholder="kg (예: 38)" aria-label="악력 kg"><span class="mout" id="m-grip-out"></span>
+          <span>손 길이</span><input type="number" id="m-hand" min="12" max="25" step="0.1" placeholder="cm" aria-label="손 길이 cm"><span class="mout" id="m-hand-out"></span>
+          <span>악력</span><input type="number" id="m-grip" min="5" max="90" step="0.5" placeholder="kg" aria-label="악력 kg"><span class="mout" id="m-grip-out"></span>
         </div>
-        <div class="mguide">
-          <div><b>손 길이</b> · 손목 안쪽 가장 아래 주름부터 가운뎃손가락 끝까지의 길이예요. 평균(20~30대): <b>남 약 19.0cm, 여 약 17.5cm</b>. 평균 ±1cm면 "중".<br>
-          <b>자가 없으면 키보드로:</b> 손바닥을 아래로 하고 손가락을 붙인 채, 손을 숫자 키 줄(1 2 3 … 0) 위에 옆으로 눕혀요. 손목 주름을 <b>숫자 1 키의 왼쪽 모서리</b>에 맞추고 손가락을 숫자 줄을 따라 쭉 펴서, 가운뎃손가락 끝이 닿는 키와 그 키의 왼쪽·오른쪽 절반을 위 목록에서 고르세요. 일반 키보드·노트북의 키 간격(약 1.9cm)으로 계산한 대략적인 값이에요. F키 줄은 키 사이 빈칸이나 크기가 기기마다 달라서 쓰지 않아요.</div>
-          <div><b>악력</b> · 악력계를 잘 쓰는 손으로 잡고, 팔꿈치를 90°로 굽힌 채 3초 동안 최대로 쥐어요. 2~3번 재서 가장 큰 값을 써요. 악력계는 보건소, 국민체력100 체력인증센터, 헬스장에 있어요. 평균(성인): <b>남 약 40kg, 여 약 24kg</b>. 남 35~45kg, 여 20~28kg이면 "중".<br>
-          <b>악력계가 없으면 체중계로:</b> 바늘이 돌아가는 아날로그 체중계를 무릎 위에 세워 받치고, 엄지를 위로 한 채 나머지 손가락으로 체중계 옆면을 감싸 6초 동안 최대로 쥐어요. 바늘이 가장 많이 움직인 kg를 넣으면 돼요. 디지털 체중계는 올라서야 켜지는 경우가 많아 잘 안 될 수 있어요. 악력계보다 부정확한 대략값이라, 경계에 걸리면 직접 판단해서 골라 주세요.</div>
-          <div>측정값은 이 화면에서 상·중·하를 고르는 데만 쓰이고, 저장되거나 AI로 보내지지 않아요.</div>
-        </div>
+        <p class="hint" style="margin:8px 0 0">손 길이는 손목 주름부터 가운뎃손가락 끝까지, 악력은 악력계(없으면 아날로그 체중계를 쥐어서)로 잰 값이에요. 괄호 안 범위면 "평균", 그보다 작으면 작다·약하다, 크면 크다·강하다로 자동으로 골라져요. 저장되거나 AI로 보내지지 않아요.</p>
       </details>
     </fieldset>
 
@@ -357,7 +350,7 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
           <input type="radio" id="uf-change" name="usedFeel" value="change" checked><label for="uf-change">바꾸고 싶어요</label>
         </div>
       </div>
-      <p class="hint">써 본 라켓을 고르면 그 라켓 사양을 기준점으로 써요. 단종 모델도 있어요. 만족했다면 가장 비슷한 현행 라켓(대체 라켓)을, 바꾸고 싶다면 후기에 적은 방향으로 옮긴 라켓을 찾아요.</p>
+      <p class="hint">써 본 라켓(단종 포함)을 고르면 그 사양을 기준으로 찾아요.</p>
       <p class="hint">후기는 AI 분석을 위해 외부 AI 서비스로 보내져요. 이름·연락처 같은 개인정보는 적지 마세요.</p>
       <textarea id="review" name="review" aria-label="써본 라켓 후기" placeholder="예) 88D는 헤드가 무거워서 수비할 때 손목이 아팠어요.">아스트록스 88D 써봤는데 헤드가 무거워서 수비할 때 손목이 아팠어요. 텐션 26은 너무 빡빡하게 느껴졌어요.</textarea>
       <div class="examples" aria-label="후기 예시 넣기">
@@ -644,6 +637,7 @@ const STYLE_KO = { smash:"강한 스매시", drive:"빠른 드라이브", net:"�
 const ENV_KO = { winter:"겨울", summer:"여름", year:"연중" };
 const CYCLE_KO = { short:"1개월 이내", mid:"2~3개월", long:"6개월 이상" };
 const LV = { "하":-1, "중":0, "상":1 };
+const HAND_KO = { "하":"작다", "중":"평균", "상":"크다" }, GRIP_KO = { "하":"약하다", "중":"평균", "상":"강하다" };
 const EXP_KO = { "하":"1년 미만", "중":"1~3년", "상":"3년 이상" };
 
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -658,7 +652,7 @@ function readForm() {
   const val = n => (f.querySelector(`input[name="${n}"]:checked`) || {}).value;
   return {
     nick: f.nick.value.trim() || "사용자",
-    hand: val("hand"), grip: val("grip"), exp: val("exp"),
+    sex: val("sex") || "남", hand: val("hand"), grip: val("grip"), exp: val("exp"),
     styles: [...f.querySelectorAll('input[name="style"]:checked')].map(i => i.value),
     env: SHOW_STRINGS ? val("env") : "year", cycle: val("cycle"), // 계절은 거트 추천용 → 거트를 켤 때까지 "연중"으로 고정
     review: f.review.value.trim().slice(0, 1500),
@@ -924,7 +918,7 @@ function explainPrompt(inp, spec, rec) {
   return `너는 배드민턴 장비 피팅 도우미다. 아래 계산 결과가 왜 이 사용자에게 맞는지 쉬운 한국어 존댓말로 설명한다. 계산 결과를 바꾸지 말고, 주어진 정보에 없는 사양을 지어내지 않는다.
 
 사용자: 닉네임 ${inp.nick}
-신체 조건(같은 성별 성인 평균 대비): 손 크기 ${inp.hand}, 악력 ${inp.grip} / 구력: ${EXP_KO[inp.exp]}
+신체 조건(${inp.sex || "남"}성 성인 평균 대비): 손 크기 ${HAND_KO[inp.hand]}, 악력 ${GRIP_KO[inp.grip]} / 구력: ${EXP_KO[inp.exp]}
 플레이 스타일: ${inp.styles.map(x => STYLE_KO[x]).join(", ") || "선택 안 함"}
 ${SHOW_STRINGS ? `사용 환경: ${ENV_KO[inp.env]}, 거트 교체 주기: ${CYCLE_KO[inp.cycle]}` : ""}
 후기: """${inp.review || "없음"}"""
@@ -953,8 +947,8 @@ function ruleExplain(inp, spec, rec) {
     racket: `${rec.t.why[0] ? rec.t.why[0] + " 목표를 잡았고, " : ""}${styleTxt} 스타일${parts.length ? "과 " + parts.join(", ") : "을 반영해"} 목표와 가장 가까운 라켓은 ${R.ko}(${R.wPick}, ${R.balLabel}, 샤프트 ${R.flexLabel})입니다.`,
     alt: (rec.anchor && rec.anchor.like && rec.alts.length ? `만족했던 ${rec.anchor.r.ko}${rec.anchor.r.disc ? "(단종)" : ""}와 사양이 가장 비슷한 현행 라켓은 ${rec.alts[0].ko}예요. ` : "") + `${R2.ko}(${R2.balLabel}, ${R2.flexLabel})와 ${R3.ko}(${R3.balLabel}, ${R3.flexLabel})도 비슷해서 매장에서 함께 휘둘러 비교해 보세요.`,
     tension: SHOW_STRINGS
-      ? `악력 ${inp.grip} 기준 텐션에 ${ENV_KO[inp.env]} 환경${spec.tensionShift ? `과 후기의 텐션 체감(${spec.tensionShift > 0 ? "+" : ""}${spec.tensionShift}lbs)` : ""}을 더해 ${rec.tension[0]}~${rec.tension[1]}lbs를 권해요.`
-      : `악력 ${inp.grip} 기준 텐션${spec.tensionShift ? `에 후기의 텐션 체감(${spec.tensionShift > 0 ? "+" : ""}${spec.tensionShift}lbs)을 더해` : "으로"} ${rec.tension[0]}~${rec.tension[1]}lbs를 권해요.`,
+      ? `악력(${({ "하":"약한 편", "중":"평균", "상":"강한 편" })[inp.grip]}) 기준 텐션에 ${ENV_KO[inp.env]} 환경${spec.tensionShift ? `과 후기의 텐션 체감(${spec.tensionShift > 0 ? "+" : ""}${spec.tensionShift}lbs)` : ""}을 더해 ${rec.tension[0]}~${rec.tension[1]}lbs를 권해요.`
+      : `악력(${({ "하":"약한 편", "중":"평균", "상":"강한 편" })[inp.grip]}) 기준 텐션${spec.tensionShift ? `에 후기의 텐션 체감(${spec.tensionShift > 0 ? "+" : ""}${spec.tensionShift}lbs)을 더해` : "으로"} ${rec.tension[0]}~${rec.tension[1]}lbs를 권해요.`,
     caution: "텐션을 갑자기 크게 올리면 팔꿈치·손목에 무리가 갈 수 있으니 1~2lbs씩 바꿔 보세요.",
   };
 }
@@ -1161,7 +1155,7 @@ async function saveFeedback(ev) {
     nick: (lastRun?.inp.nick || "").slice(0, 20),
     fit: val("fit"), clear: val("clear"), easy: val("easy"),
     comment: $("fb-text").value.trim().slice(0, 600),
-    input: lastRun ? { hand: lastRun.inp.hand, grip: lastRun.inp.grip, exp: lastRun.inp.exp, styles: lastRun.inp.styles, env: lastRun.inp.env, hasReview: !!lastRun.inp.review } : null,
+    input: lastRun ? { sex: lastRun.inp.sex, hand: lastRun.inp.hand, grip: lastRun.inp.grip, exp: lastRun.inp.exp, styles: lastRun.inp.styles, env: lastRun.inp.env, hasReview: !!lastRun.inp.review } : null,
     top3: lastRun?.top3 || [], tension: lastRun?.tension || "",
     specAI: !!lastRun?.specAI, explainAI: !!lastRun?.explainAI,
   };
@@ -1441,20 +1435,23 @@ loadLastLab();
                         악력 남 약 40kg → 35~45kg, 여 약 24kg → 20~28kg
                                                                                                */
 const NORMS = { hand: { "남": [18.0, 20.0], "여": [16.5, 18.5] }, grip: { "남": [35, 45], "여": [20, 28] } };
+const AVG = { "남": { hand: "평균 19.0cm (18~20)", grip: "평균 40kg (35~45)" }, "여": { hand: "평균 17.5cm (16.5~18.5)", grip: "평균 24kg (20~28)" } };
+const curSex = () => (document.querySelector('input[name="sex"]:checked') || {}).value || "남";
+function showAvg() { const a = AVG[curSex()]; $("avg-hand").textContent = a.hand; $("avg-grip").textContent = a.grip; }
 function applyMeasure() {
-  const sex = (document.querySelector('input[name="msex"]:checked') || {}).value || "남";
+  const sex = curSex();
   for (const k of ["hand", "grip"]) {
     const v = parseFloat($("m-" + k).value), out = $("m-" + k + "-out");
     if (!Number.isFinite(v)) { out.textContent = ""; continue; }
     const [lo, hi] = NORMS[k][sex];
     const lv = v < lo ? "하" : v > hi ? "상" : "중";
-    out.textContent = "→ " + lv;
+    out.textContent = "→ " + ({ hand: { "하":"작다","중":"평균","상":"크다" }, grip: { "하":"약하다","중":"평균","상":"강하다" } })[k][lv];
     const r = document.querySelector(`input[name="${k}"][value="${lv}"]`); if (r) r.checked = true;
   }
 }
-$("m-key").addEventListener("change", () => { if ($("m-key").value) $("m-hand").value = $("m-key").value; });
 $("measure").addEventListener("input", applyMeasure);
-$("measure").addEventListener("change", applyMeasure);
+document.querySelectorAll('input[name="sex"]').forEach(r => r.addEventListener("change", () => { showAvg(); applyMeasure(); }));
+showAvg();
 
 // 예시 후기 버튼
 document.querySelectorAll(".examples button").forEach(b => b.addEventListener("click", () => { $("review").value = b.dataset.ex; $("review").focus(); }));
