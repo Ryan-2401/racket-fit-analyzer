@@ -1,0 +1,6 @@
+{
+  "name": "racket-fit-analyzer",
+  "private": true,
+  "description": "AI 라켓·거트 궁합 분석기 — 정적 웹 페이지 + AI 호출 서버 함수",
+  "engines": { "node": ">=18" }
+}
