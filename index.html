@@ -236,6 +236,8 @@ table.grid tr.best td { background: var(--accent-soft); }
 .stat small { color: var(--muted); font-size: 12px; display: block; }
 .stat b { font-family: var(--font-display); font-weight: 400; font-size: 24px; }
 .fb-q { display: grid; gap: 6px; }
+.consent { display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.consent input { margin-top: 3px; }
 .fb-q > span { font-size: 13.5px; font-weight: 600; }
 .scale5 { display: grid; grid-template-columns: repeat(5, 1fr); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; max-width: 360px; }
 .scale5 input { position: absolute; opacity: 0; pointer-events: none; }
@@ -443,38 +445,34 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
     </div>
     <form class="panel card" id="fb-form" hidden>
       <div class="card-head">
-        <h2>사용자 테스트 · 이 추천 어땠나요?</h2>
-        <span class="hint">1분이면 끝나요 · 닉네임과 입력 조건만 함께 저장돼요</span>
+        <h2>1분 설문 · 이 추천 어땠나요?</h2>
+        <span class="hint">수업 과제 사용자 테스트 · 1 전혀 아니다 ~ 5 매우 그렇다</span>
       </div>
-      <div class="fb-q"><span>1. 추천받은 라켓이 내 몸과 스타일에 맞아 보이나요?</span>
-        <div class="scale5" role="radiogroup" aria-label="추천 적합도">
-          <input type="radio" name="fit" id="fit1" value="1"><label for="fit1">1</label>
-          <input type="radio" name="fit" id="fit2" value="2"><label for="fit2">2</label>
-          <input type="radio" name="fit" id="fit3" value="3"><label for="fit3">3</label>
-          <input type="radio" name="fit" id="fit4" value="4"><label for="fit4">4</label>
-          <input type="radio" name="fit" id="fit5" value="5"><label for="fit5">5</label>
-        </div><small class="hint">1 전혀 아니다 · 5 매우 그렇다</small></div>
-      <div class="fb-q"><span>2. "왜 이 조합인가요?" 설명이 이해되었나요?</span>
-        <div class="scale5" role="radiogroup" aria-label="설명 이해도">
-          <input type="radio" name="clear" id="cl1" value="1"><label for="cl1">1</label>
-          <input type="radio" name="clear" id="cl2" value="2"><label for="cl2">2</label>
-          <input type="radio" name="clear" id="cl3" value="3"><label for="cl3">3</label>
-          <input type="radio" name="clear" id="cl4" value="4"><label for="cl4">4</label>
-          <input type="radio" name="clear" id="cl5" value="5"><label for="cl5">5</label>
+      <div class="fb-q"><span>1. 추천받은 라켓이 내 몸과 플레이 스타일에 맞아 보인다</span>
+        <div class="scale5" role="radiogroup" aria-label="추천 적합도"><input type="radio" name="fit" id="fit1" value="1"><label for="fit1">1</label><input type="radio" name="fit" id="fit2" value="2"><label for="fit2">2</label><input type="radio" name="fit" id="fit3" value="3"><label for="fit3">3</label><input type="radio" name="fit" id="fit4" value="4"><label for="fit4">4</label><input type="radio" name="fit" id="fit5" value="5"><label for="fit5">5</label></div></div>
+      <div class="fb-q"><span>2. "왜 이 조합인가요?" 설명이 이해되고 납득이 된다</span>
+        <div class="scale5" role="radiogroup" aria-label="설명 이해도"><input type="radio" name="clear" id="clear1" value="1"><label for="clear1">1</label><input type="radio" name="clear" id="clear2" value="2"><label for="clear2">2</label><input type="radio" name="clear" id="clear3" value="3"><label for="clear3">3</label><input type="radio" name="clear" id="clear4" value="4"><label for="clear4">4</label><input type="radio" name="clear" id="clear5" value="5"><label for="clear5">5</label></div></div>
+      <div class="fb-q"><span>3. AI가 내 후기 표현(무겁다, 딱딱하다 등)을 제대로 이해했다 (후기를 안 썼으면 3)</span>
+        <div class="scale5" role="radiogroup" aria-label="후기 이해도"><input type="radio" name="aiu" id="aiu1" value="1"><label for="aiu1">1</label><input type="radio" name="aiu" id="aiu2" value="2"><label for="aiu2">2</label><input type="radio" name="aiu" id="aiu3" value="3"><label for="aiu3">3</label><input type="radio" name="aiu" id="aiu4" value="4"><label for="aiu4">4</label><input type="radio" name="aiu" id="aiu5" value="5"><label for="aiu5">5</label></div></div>
+      <div class="fb-q"><span>4. 처음 써도 헤매지 않고 쉽게 쓸 수 있었다</span>
+        <div class="scale5" role="radiogroup" aria-label="사용 편의성"><input type="radio" name="easy" id="easy1" value="1"><label for="easy1">1</label><input type="radio" name="easy" id="easy2" value="2"><label for="easy2">2</label><input type="radio" name="easy" id="easy3" value="3"><label for="easy3">3</label><input type="radio" name="easy" id="easy4" value="4"><label for="easy4">4</label><input type="radio" name="easy" id="easy5" value="5"><label for="easy5">5</label></div></div>
+      <div class="fb-q"><span>5. 추천받은 라켓을 매장에서 휘둘러 보거나 사 볼 생각이 있다</span>
+        <div class="scale5" role="radiogroup" aria-label="시도 의향"><input type="radio" name="try" id="try1" value="1"><label for="try1">1</label><input type="radio" name="try" id="try2" value="2"><label for="try2">2</label><input type="radio" name="try" id="try3" value="3"><label for="try3">3</label><input type="radio" name="try" id="try4" value="4"><label for="try4">4</label><input type="radio" name="try" id="try5" value="5"><label for="try5">5</label></div></div>
+      <div class="fb-q"><span>6. 헷갈리거나 불편했던 부분 (선택, 여러 개)</span>
+        <div class="chips" id="fb-confuse">
+          <input type="checkbox" id="cf1" value="신체 조건 고르기"><label for="cf1">신체 조건 고르기</label>
+          <input type="checkbox" id="cf2" value="재는 법"><label for="cf2">손 길이·악력 재는 법</label>
+          <input type="checkbox" id="cf3" value="써 본 라켓 고르기"><label for="cf3">써 본 라켓 고르기</label>
+          <input type="checkbox" id="cf4" value="후기 쓰기"><label for="cf4">후기 쓰기</label>
+          <input type="checkbox" id="cf5" value="결과 읽기"><label for="cf5">결과 화면 읽기</label>
+          <input type="checkbox" id="cf6" value="AI 속도"><label for="cf6">AI 응답 속도</label>
         </div></div>
-      <div class="fb-q"><span>3. 처음 쓸 때 헤매지 않았나요?</span>
-        <div class="scale5" role="radiogroup" aria-label="사용 편의성">
-          <input type="radio" name="easy" id="ea1" value="1"><label for="ea1">1</label>
-          <input type="radio" name="easy" id="ea2" value="2"><label for="ea2">2</label>
-          <input type="radio" name="easy" id="ea3" value="3"><label for="ea3">3</label>
-          <input type="radio" name="easy" id="ea4" value="4"><label for="ea4">4</label>
-          <input type="radio" name="easy" id="ea5" value="5"><label for="ea5">5</label>
-        </div></div>
-      <label class="field" for="fb-text">4. 헷갈렸던 곳이나 바라는 점 (선택)
+      <label class="field" for="fb-text">7. 고쳤으면 하는 점이나 바라는 기능 (선택)
         <textarea id="fb-text" maxlength="600" style="min-height:70px" placeholder="예) 손 크기를 어떻게 재는지 헷갈렸어요"></textarea>
       </label>
+      <label class="consent"><input type="checkbox" id="fb-consent"> 닉네임·입력한 조건·후기·추천 결과와 이 설문 응답을 수업 과제 보고서에 익명으로 쓰는 데 동의해요. (손 길이·악력 측정값은 보내지 않아요)</label>
       <div class="row-actions">
-        <button type="submit" class="primary" id="fb-send">피드백 저장하기</button>
+        <button type="submit" class="primary" id="fb-send">설문 보내기</button>
         <span class="hint" id="fb-status"></span>
       </div>
     </form>
@@ -863,6 +861,7 @@ function recommend(inp, spec) {
 
 /* ---------- AI 호출 ---------- */
 /* ---------- 설정: 웹사이트로 배포할 때 바꾸는 값 ---------- */
+const SHEET_URL = "https://script.google.com/macros/s/AKfycbwW2E87nSg0g7QEs4yS_j3xukOR15WJ52r6YHlTiKVdjBudV8Iohq338m9Q4h_rw5dO9Q/exec"; // 설문 응답을 받을 구글 Apps Script 웹 앱 주소 (설문수집_웹앱.gs 배포 후 붙여넣기). 넣으면 앱 안 설문이 구글 시트로 바로 저장돼요.
 const SURVEY_URL = ""; // 사용자 테스트 설문(구글 폼) 주소. 비워 두면 설문 안내 카드가 숨겨져요.
 
 // 어디서 열렸는지에 따라 AI를 부르는 길이 달라진다
@@ -1155,7 +1154,7 @@ window.addEventListener("hashchange", route);
    저장 위치: feedback/<참여자 id> 문서 하나에 entries 배열로 누적
    ============================================================ */
 function showFeedbackForm() {
-  if (!IN_CLAUDE) { // 웹사이트·파일 버전: 앱 안 저장소 대신 설문 링크
+  if (!IN_CLAUDE && !SHEET_URL) { // 시트 주소가 없으면 외부 설문 링크로 대신
     if (SURVEY_URL) { $("survey-link").href = SURVEY_URL; $("survey-card").hidden = false; }
     return;
   }
@@ -1168,18 +1167,28 @@ async function saveFeedback(ev) {
   ev.preventDefault();
   const f = $("fb-form");
   const val = n => +((f.querySelector(`input[name="${n}"]:checked`) || {}).value || 0);
+  const inp = lastRun?.inp || {};
   const entry = {
     ts: new Date().toISOString(),
-    nick: (lastRun?.inp.nick || "").slice(0, 20),
-    fit: val("fit"), clear: val("clear"), easy: val("easy"),
+    nick: (inp.nick || "").slice(0, 20),
+    fit: val("fit"), clear: val("clear"), aiu: val("aiu"), easy: val("easy"), try: val("try"),
+    confuse: [...f.querySelectorAll("#fb-confuse input:checked")].map(x => x.value).join(", "),
     comment: $("fb-text").value.trim().slice(0, 600),
-    input: lastRun ? { sex: lastRun.inp.sex, hand: lastRun.inp.hand, grip: lastRun.inp.grip, exp: lastRun.inp.exp, styles: lastRun.inp.styles, env: lastRun.inp.env, hasReview: !!lastRun.inp.review } : null,
+    input: lastRun ? { sex: inp.sex, hand: HAND_KO[inp.hand], grip: GRIP_KO[inp.grip], exp: EXP_KO[inp.exp], styles: STYLE_SHORT(inp.styles), used: inp.used || "", usedFeel: inp.used ? (inp.usedFeel === "like" ? "만족" : "바꾸고 싶음") : "", hasReview: !!inp.review } : null,
+    review: (inp.review || "").slice(0, 500),
     top3: lastRun?.top3 || [], tension: lastRun?.tension || "",
     specAI: !!lastRun?.specAI, explainAI: !!lastRun?.explainAI,
   };
-  if (!entry.fit || !entry.clear || !entry.easy) { $("fb-status").textContent = "1~3번 점수를 모두 골라 주세요."; return; }
-  const btn = $("fb-send"); btn.disabled = true; $("fb-status").textContent = "저장 중…";
+  if (!entry.fit || !entry.clear || !entry.aiu || !entry.easy || !entry.try) { $("fb-status").textContent = "1~5번 점수를 모두 골라 주세요."; return; }
+  if (!$("fb-consent").checked) { $("fb-status").textContent = "맨 아래 동의에 체크해 주세요."; return; }
+  const btn = $("fb-send"); btn.disabled = true; $("fb-status").textContent = "보내는 중…";
+  const done = () => { $("fb-status").textContent = "보냈어요. 참여해 주셔서 고마워요!"; f.reset(); btn.disabled = true; btn.textContent = "보냄 ✓"; };
   try {
+    if (SHEET_URL && !IN_CLAUDE) {
+      // 구글 Apps Script 웹 앱으로 전송 (응답은 읽을 수 없는 no-cors 방식이라, 네트워크 오류만 실패로 본다)
+      await fetch(SHEET_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(entry) });
+      done(); return;
+    }
     const [db, user] = await Promise.all([dbPromise, userPromise]);
     const uid = user ? await user.id() : null;
     if (!db || !uid) throw Object.assign(new Error("no db"), { code: "unavailable" });
@@ -1188,16 +1197,15 @@ async function saveFeedback(ev) {
     const entries = snap.exists ? [...(snap.data().entries || [])] : [];
     entries.push(entry);
     await ref.set({ entries: entries.slice(-20), updated: entry.ts });
-    $("fb-status").textContent = "저장했어요. 참여해 주셔서 고마워요!";
-    f.reset();
+    done();
   } catch (e) {
-    const t = JSON.stringify(entry);
-    $("fb-status").textContent = "이 화면에서는 저장할 수 없어요. 아래 내용을 복사해 만든 사람에게 보내 주세요: " + t;
-  } finally { btn.disabled = false; }
+    btn.disabled = false;
+    $("fb-status").textContent = "보내지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.";
+  }
 }
 $("fb-form").addEventListener("submit", saveFeedback);
 
-const STYLE_SHORT = s => (s || []).map(x => STYLE_KO[x]).join("·") || "-";
+const STYLE_SHORT = s => typeof s === "string" ? (s || "-") : (s || []).map(x => STYLE_KO[x]).join("·") || "-";
 async function loadFeedback() {
   const status = $("fbl-status");
   const [db, user] = await Promise.all([dbPromise, userPromise]);
@@ -1216,14 +1224,14 @@ async function loadFeedback() {
       ["추천 적합도 평균", avg("fit") + " / 5"], ["설명 이해도 평균", avg("clear") + " / 5"], ["사용 편의성 평균", avg("easy") + " / 5"],
     ].map(([k, v]) => `<div class="stat"><small>${k}</small><b class="num">${v}</b></div>`).join("");
     $("fbl-table").innerHTML = `<tr><th>참여자</th><th>시각</th><th>조건 (손·악력 / 구력 / 스타일)</th><th>추천 1~3위</th><th class="n">적합</th><th class="n">설명</th><th class="n">편의</th><th>의견</th><th>AI</th></tr>` +
-      rows.map(r => `<tr><td>${esc(r.who)}</td><td class="n">${esc((r.ts || "").slice(5, 16).replace("T", " "))}</td><td>${r.input ? esc(`${r.input.hand}·${r.input.grip} / ${EXP_KO[r.input.exp] || "-"} / ${STYLE_SHORT(r.input.styles)}${r.input.hasReview ? " / 후기 있음" : ""}`) : "-"}</td><td>${esc((r.top3 || []).join(", "))}</td><td class="n">${r.fit}</td><td class="n">${r.clear}</td><td class="n">${r.easy}</td><td>${esc(r.comment || "")}</td><td>${r.specAI || r.explainAI ? "사용" : "규칙"}</td></tr>`).join("");
+      rows.map(r => `<tr><td>${esc(r.who)}</td><td class="n">${esc((r.ts || "").slice(5, 16).replace("T", " "))}</td><td>${r.input ? esc(`${r.input.hand}·${r.input.grip} / ${EXP_KO[r.input.exp] || r.input.exp || "-"} / ${STYLE_SHORT(r.input.styles)}${r.input.hasReview ? " / 후기 있음" : ""}`) : "-"}</td><td>${esc((r.top3 || []).join(", "))}</td><td class="n">${r.fit}</td><td class="n">${r.clear}</td><td class="n">${r.easy}</td><td>${esc(r.comment || "")}</td><td>${r.specAI || r.explainAI ? "사용" : "규칙"}</td></tr>`).join("");
     status.textContent = rows.length ? "" : "아직 저장된 피드백이 없어요. 앱을 Contributor 권한으로 공유한 뒤 테스트를 진행하세요.";
     window.__fbRows = rows;
   } catch (e) { clearTimeout(timer); status.textContent = "피드백을 불러오지 못했어요. (" + (e.code || "오류") + ")"; }
 }
 $("fbl-copy").addEventListener("click", async () => {
   const rows = window.__fbRows || [];
-  const text = ["참여자\t시각\t조건\t추천1~3위\t적합\t설명\t편의\t의견"].concat(rows.map(r => [r.who, r.ts, r.input ? `${r.input.hand}·${r.input.grip}/${EXP_KO[r.input.exp] || "-"}/${STYLE_SHORT(r.input.styles)}` : "", (r.top3 || []).join(", "), r.fit, r.clear, r.easy, (r.comment || "").replace(/\s+/g, " ")].join("\t"))).join("\n");
+  const text = ["참여자\t시각\t조건\t추천1~3위\t적합\t설명\t편의\t의견"].concat(rows.map(r => [r.who, r.ts, r.input ? `${r.input.hand}·${r.input.grip}/${EXP_KO[r.input.exp] || r.input.exp || "-"}/${STYLE_SHORT(r.input.styles)}` : "", (r.top3 || []).join(", "), r.fit, r.clear, r.easy, (r.comment || "").replace(/\s+/g, " ")].join("\t"))).join("\n");
   try { await navigator.clipboard.writeText(text); $("fbl-copy").textContent = "복사했어요"; } catch { $("fbl-copy").textContent = "복사가 막혀 있어요"; }
 });
 userPromise.then(u => { if (u && u.canEdit()) $("nav-fb").hidden = false; });
