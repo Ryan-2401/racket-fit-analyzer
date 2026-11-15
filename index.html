@@ -97,6 +97,10 @@ details.measure[open] { padding-bottom: 12px; }
 .chips input:checked + label { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 .chips input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: 1px; }
 
+.empty-state h2 { margin: 0 0 8px; }
+.empty-state ol { margin: 0; padding-left: 20px; line-height: 1.8; color: var(--muted); }
+#result-body { display: flex; flex-direction: column; gap: inherit; }
+#result-body[hidden] { display: none !important; }
 .used-row { display: grid; grid-template-columns: 1fr 190px; gap: 8px; align-items: center; }
 .used-row select { border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 7px 8px; color: var(--ink); min-width: 0; }
 .used-row .seg { grid-template-columns: repeat(2, 1fr); }
@@ -375,6 +379,16 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
     <div class="banner info" id="banner-info"></div>
     <div class="banner warn" id="banner-warn"></div>
 
+    <div class="panel card empty-state" id="result-empty">
+      <h2>아직 추천 결과가 없어요</h2>
+      <ol>
+        <li>왼쪽에서 성별·손 크기·악력·구력을 고르고</li>
+        <li>플레이 스타일과 써 본 라켓 후기를 적은 뒤</li>
+        <li><b>AI로 분석하기</b>를 누르면, AI가 후기를 읽고 나에게 맞는 라켓과 이유를 보여 줘요.</li>
+      </ol>
+    </div>
+
+    <div id="result-body" hidden>
     <div class="panel hero">
       <div class="hero-head">
         <h2 id="hero-title">추천 조합</h2>
@@ -476,6 +490,8 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
         <pre class="json" id="spec-json"></pre>
       </details>
     </div>
+
+    </div><!-- /result-body -->
 
     <div class="panel card">
       <details>
@@ -959,6 +975,7 @@ function setPipe(n, state, text) { const p = $("p" + n); p.dataset.state = state
 function banner(kind, text) { const b = $("banner-" + kind); b.textContent = text || ""; b.classList.toggle("show", !!text); }
 
 function renderAll(inp, spec, rec, opt) {
+  $("result-empty").hidden = true; $("result-body").hidden = false;
   const R = rec.top[0], S = rec.strings[0];
   $("pick-racket").innerHTML = `
     <div class="kind">라켓 1순위 · <span class="pct num">${R.score}%</span></div>
@@ -1049,6 +1066,7 @@ async function analyze() {
   if (running) return;
   running = true;
   const btn = $("go"); btn.disabled = true; btn.textContent = "분석 중…";
+  if (window.innerWidth < 900) document.querySelector(".results").scrollIntoView({ behavior: "smooth", block: "start" }); // 휴대폰: 결과 쪽으로 이동
   banner("warn", ""); banner("info", "");
   const inp = readForm();
   let spec, specAI = false, aiDown = false;
@@ -1465,12 +1483,6 @@ $("form").addEventListener("submit", e => { e.preventDefault(); analyze(); });
   renderDB();
   const opt = r => `<option value="${esc(r.name)}">${esc(r.brand)} ${esc(r.ko)}</option>`;
   $("used").innerHTML = `<option value="">써 본 라켓 고르기 (선택)</option><optgroup label="현재 판매 중">${RACKETS.map(opt).join("")}</optgroup><optgroup label="단종·구형 (참고용)">${REF_RACKETS.map(opt).join("")}</optgroup>`;
-  const inp = readForm();
-  const spec = ruleParse(inp.review);
-  const rec = recommend(inp, spec);
-  renderAll(inp, spec, rec, { tag: "기본값 · 기본 규칙으로 미리 계산", specAI: false });
-  renderExplain(ruleExplain(inp, spec, rec), false);
-  banner("info", "모두 평균으로 두고 미리 계산한 결과예요. 내 조건을 고르고 'AI로 분석하기'를 누르면 AI가 후기를 해석하고 추천 이유를 써 줘요.");
   route();
   if (ON_WEB) $("go-hint").textContent = "후기 해석과 추천 근거를 AI가 만듭니다. 몇 초 걸릴 수 있어요.";
   samplePromise.then(s => { if (!s) $("go-hint").textContent = "지금 화면에서는 AI를 쓸 수 없어 기본 규칙으로 분석해요. claude.ai에서 열면 AI 분석이 켜져요."; });
