@@ -271,7 +271,7 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
 <main class="view" id="view-main">
   <form class="panel" id="form" autocomplete="off">
     <label class="field" for="nick">닉네임
-      <input type="text" id="nick" name="nick" maxlength="20" value="셔틀콕" placeholder="예) 셔틀콕">
+      <input type="text" id="nick" name="nick" maxlength="20" value="" placeholder="예) 셔틀콕">
     </label>
 
     <fieldset>
@@ -290,8 +290,8 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
         </div>
         <span>악력<small class="avg" id="avg-grip"></small></span>
         <div class="seg" role="radiogroup" aria-label="악력">
-          <input type="radio" id="grip-l" name="grip" value="하" checked><label for="grip-l">약하다</label>
-          <input type="radio" id="grip-m" name="grip" value="중"><label for="grip-m">평균</label>
+          <input type="radio" id="grip-l" name="grip" value="하"><label for="grip-l">약하다</label>
+          <input type="radio" id="grip-m" name="grip" value="중" checked><label for="grip-m">평균</label>
           <input type="radio" id="grip-h" name="grip" value="상"><label for="grip-h">강하다</label>
         </div>
         <span>구력</span>
@@ -314,10 +314,10 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
     <fieldset>
       <legend><span class="step">2</span>플레이 스타일 <span class="hint">여러 개 선택 가능</span></legend>
       <div class="chips" id="styles">
-        <input type="checkbox" id="st-smash" name="style" value="smash" checked><label for="st-smash">강한 스매시</label>
+        <input type="checkbox" id="st-smash" name="style" value="smash"><label for="st-smash">강한 스매시</label>
         <input type="checkbox" id="st-drive" name="style" value="drive"><label for="st-drive">빠른 드라이브</label>
         <input type="checkbox" id="st-net" name="style" value="net"><label for="st-net">네트·컨트롤</label>
-        <input type="checkbox" id="st-def" name="style" value="defense" checked><label for="st-def">수비·리시브</label>
+        <input type="checkbox" id="st-def" name="style" value="defense"><label for="st-def">수비·리시브</label>
         <input type="checkbox" id="st-all" name="style" value="allround"><label for="st-all">올라운드</label>
         <input type="checkbox" id="st-light" name="style" value="light"><label for="st-light">가벼운 스윙</label>
       </div>
@@ -352,7 +352,7 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
       </div>
       <p class="hint">써 본 라켓(단종 포함)을 고르면 그 사양을 기준으로 찾아요.</p>
       <p class="hint">후기는 AI 분석을 위해 외부 AI 서비스로 보내져요. 이름·연락처 같은 개인정보는 적지 마세요.</p>
-      <textarea id="review" name="review" aria-label="써본 라켓 후기" placeholder="예) 88D는 헤드가 무거워서 수비할 때 손목이 아팠어요.">아스트록스 88D 써봤는데 헤드가 무거워서 수비할 때 손목이 아팠어요. 텐션 26은 너무 빡빡하게 느껴졌어요.</textarea>
+      <textarea id="review" name="review" aria-label="써본 라켓 후기" placeholder="예) 88D는 헤드가 무거워서 수비할 때 손목이 아팠어요. 텐션 26은 빡빡했어요."></textarea>
       <div class="examples" aria-label="후기 예시 넣기">
         <button type="button" data-ex="나노플레어 800은 빠른데 스매시에 힘이 안 실려요. 샤프트가 너무 딱딱해서 공이 안 나가는 느낌이에요.">예시: 힘이 안 실림</button>
         <button type="button" data-ex="입문용 라켓이 너무 낭창거려서 공 방향이 자꾸 흔들려요. 텐션도 헐렁한 느낌이에요.">예시: 컨트롤 흔들림</button>
@@ -378,7 +378,7 @@ footer { max-width: 1240px; margin: 0 auto; padding: 8px 20px 32px; color: var(-
     <div class="panel hero">
       <div class="hero-head">
         <h2 id="hero-title">추천 조합</h2>
-        <span class="tag" id="hero-tag">예시 입력으로 계산한 결과</span>
+        <span class="tag" id="hero-tag">기본값으로 계산한 결과</span>
       </div>
       <div class="combo">
         <div class="pick" id="pick-racket"></div>
@@ -1468,9 +1468,9 @@ $("form").addEventListener("submit", e => { e.preventDefault(); analyze(); });
   const inp = readForm();
   const spec = ruleParse(inp.review);
   const rec = recommend(inp, spec);
-  renderAll(inp, spec, rec, { tag: "예시 입력 · 기본 규칙으로 미리 계산", specAI: false });
+  renderAll(inp, spec, rec, { tag: "기본값 · 기본 규칙으로 미리 계산", specAI: false });
   renderExplain(ruleExplain(inp, spec, rec), false);
-  banner("info", "예시 입력으로 미리 계산한 결과예요. 내 조건으로 바꾸고 'AI로 분석하기'를 누르면 AI가 후기를 해석하고 추천 이유를 써 줘요.");
+  banner("info", "모두 평균으로 두고 미리 계산한 결과예요. 내 조건을 고르고 'AI로 분석하기'를 누르면 AI가 후기를 해석하고 추천 이유를 써 줘요.");
   route();
   if (ON_WEB) $("go-hint").textContent = "후기 해석과 추천 근거를 AI가 만듭니다. 몇 초 걸릴 수 있어요.";
   samplePromise.then(s => { if (!s) $("go-hint").textContent = "지금 화면에서는 AI를 쓸 수 없어 기본 규칙으로 분석해요. claude.ai에서 열면 AI 분석이 켜져요."; });
