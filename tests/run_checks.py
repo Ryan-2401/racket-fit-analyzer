@@ -12,23 +12,25 @@ APP = (pathlib.Path(__file__).resolve().parent.parent / "index.html").as_uri()
 CHECKS = r"""() => {
   const out = {};
   // 1) 예시 조건 4개
+  const base = { sex:'남', curT:null, budget:0, used:'', usedFeel:'change' };
   const cases = [
-    {nick:'a',hand:'중',grip:'하',flexb:'중',styles:['smash','defense'],env:'winter',cycle:'mid',review:'아스트록스 88D 써봤는데 헤드가 무거워서 수비할 때 손목이 아팠어요. 텐션 26은 너무 빡빡하게 느껴졌어요.'},
-    {nick:'b',hand:'상',grip:'상',flexb:'상',styles:['smash'],env:'year',cycle:'short',review:'나노플레어 800은 빠른데 스매시에 힘이 안 실려요.'},
-    {nick:'c',hand:'하',grip:'하',flexb:'하',styles:['net','light'],env:'summer',cycle:'long',review:''},
-    {nick:'d',hand:'중',grip:'중',flexb:'중',styles:['allround'],env:'year',cycle:'mid',review:''},
+    {...base, nick:'a',hand:'중',grip:'하',exp:'중',styles:['smash','defense'],env:'winter',cycle:'mid',review:'아스트록스 88D 써봤는데 헤드가 무거워서 수비할 때 손목이 아팠어요. 텐션 26은 너무 빡빡하게 느껴졌어요.'},
+    {...base, nick:'b',hand:'상',grip:'상',exp:'상',styles:['smash'],env:'year',cycle:'short',curT:27,review:'나노플레어 800은 빠른데 스매시에 힘이 안 실려요. 거트는 BG66 울티맥스를 썼는데 한 달도 안 돼 끊어졌어요.'},
+    {...base, nick:'c',hand:'하',grip:'하',exp:'하',styles:['net','light'],env:'summer',cycle:'long',budget:100000,review:''},
+    {...base, nick:'d',hand:'중',grip:'중',exp:'중',styles:['allround'],env:'year',cycle:'mid',review:''},
   ];
   out.examples = cases.map(c => { const s = ruleParse(c.review), r = recommend(c, s);
-    return { who: c.nick, top3: r.top.slice(0,3).map(x => `${x.ko} ${x.wPick} ${x.score}%`), tension: r.tension.join('-') }; });
+    return { who: c.nick, rackets: r.top.slice(0,3).map(x => `${x.ko} ${x.wPick} ${x.score}%`), strings: r.strings.slice(0,3).map(x => `${x.ko} ${x.score}%`), tension: r.tension.join('-') }; });
   // 2) AI 실험실 기준선 (기본 규칙)
   const per = LAB_CASES.map((c,i) => { const s = ruleParse(c.text); return { i:i+1, ms:0, jsonOk:true, model:'규칙', spec:s, g:gradeCase(c,s) }; });
   const a = summarize(LAB_CONDS[0], per);
   out.labBaseline = { fieldAcc: a.fieldAcc, ok: a.fieldOk, n: a.fieldN, nameAcc: a.nameAcc, attackOk: a.attackOk };
-  // 3) 가상 사용자 567명
-  const sims = simulateAll(); const brand = {}; let errors = 0; const in3 = new Set();
-  for (const s of sims) { const t = s.rec.top[0]; if (!t) { errors++; continue; }
+  // 3) 가상 사용자 (손 3 × 악력 3 × 구력 3 × 스타일 7 × 계절 3 × 교체 주기 3)
+  const sims = simulateAll(); const brand = {}, gut = {}; let errors = 0; const in3 = new Set(), gut3 = new Set();
+  for (const s of sims) { const t = s.rec.top[0], g = s.rec.strings[0]; if (!t || !g) { errors++; continue; }
+    gut[g.ko] = (gut[g.ko]||0)+1; s.rec.strings.slice(0,3).forEach(x => gut3.add(x.id));
     brand[t.brand] = (brand[t.brand]||0)+1; s.rec.top.slice(0,3).forEach(g => [g, ...g.same].forEach(r => in3.add(r.id))); }
-  out.personas = { n: sims.length, errors, top1Brand: brand, coveredInTop3: in3.size, total: RACKETS.length };
+  out.personas = { n: sims.length, errors, racketTop1Brand: brand, racketsInTop3: `${in3.size}/${RACKETS.length}`, stringTop1: gut, stringsInTop3: `${gut3.size}/${STRINGS.length}` };
   return JSON.stringify(out);
 }"""
 
