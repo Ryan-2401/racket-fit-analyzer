@@ -1157,7 +1157,9 @@ function renderAll(inp, spec, rec, opt) {
   setBadge("spec-badge", opt.specAI, "AI가 생성한 내용", "기본 규칙으로 해석");
 }
 
+let lastExplain = null;
 function renderExplain(ex, isAI) {
+  lastExplain = ex;
   if (!ex) { $("explain").innerHTML = `<p class="skeleton">AI가 추천 근거를 쓰고 있어요…</p>`; return; }
   $("explain").innerHTML = `
     <p class="lead">${esc(ex.headline)}</p>
@@ -1188,6 +1190,20 @@ function renderDB() {
 /* ---------- 실행 흐름 ---------- */
 let running = false;
 let lastRun = null;
+// 설문 시트에 남길 요약: AI가 후기에서 읽은 것 / AI가 쓴 추천 이유
+function specSummary(sp) {
+  if (!sp) return "";
+  const dir = (v, neg, pos) => v <= -0.2 ? neg : v >= 0.2 ? pos : "";
+  const parts = [dir(sp.balance, "헤드라이트 쪽", "헤드헤비 쪽"), dir(sp.stiffness, "유연한 샤프트", "단단한 샤프트"), dir(sp.weight, "가볍게", "무겁게"),
+    dir(sp.repulsion, "", "거트 반발↑"), dir(sp.control, "", "거트 컨트롤↑"), dir(sp.durability, "", "거트 내구↑"),
+    sp.tensionShift ? `텐션 ${sp.tensionShift > 0 ? "+" : ""}${sp.tensionShift}lbs` : "", sp.currentTension ? `지금 텐션 ${sp.currentTension}` : ""].filter(Boolean);
+  const ev = (sp.evidence || []).map(e => `"${e.phrase}"→${e.meaning}`).join(" / ");
+  return [parts.length ? "방향: " + parts.join(", ") : "", sp.dislikes?.length ? "불만: " + sp.dislikes.join(", ") : "", sp.likes?.length ? "만족: " + sp.likes.join(", ") : "", ev ? "근거: " + ev : ""].filter(Boolean).join(" | ");
+}
+function explainSummary(ex) {
+  if (!ex) return "";
+  return [ex.headline, ex.racket && "라켓: " + ex.racket, ex.string && "거트: " + ex.string, ex.tension && "텐션: " + ex.tension, ex.caution && "주의: " + ex.caution].filter(Boolean).join("\n");
+}
 async function analyze() {
   if (running) return;
   running = true;
@@ -1246,7 +1262,8 @@ async function analyze() {
     }
     banner("info", "");
   }
-  lastRun = { inp, top3: rec.top.slice(0, 3).map(x => x.ko), wPick: rec.top[0].wPick, strings: rec.strings.slice(0, 3).map(x => x.ko), tension: rec.tension.join("-"), specAI, explainAI: !aiDown && $("explain-badge").classList.contains("rule") === false };
+  lastRun = { inp, top3: rec.top.slice(0, 3).map(x => x.ko), wPick: rec.top[0].wPick, strings: rec.strings.slice(0, 3).map(x => x.ko), tension: rec.tension.join("-"), specAI, specMode: specAI ? "AI" : inp.review ? "규칙(AI 실패)" : "후기 없음",
+    specText: specSummary(spec), explainText: explainSummary(lastExplain), explainAI: !aiDown && $("explain-badge").classList.contains("rule") === false };
   showFeedbackForm();
   btn.disabled = false; btn.textContent = "다시 분석하기"; running = false;
 }
@@ -1326,7 +1343,8 @@ async function saveFeedback(ev) {
     input: lastRun ? { sex: inp.sex, hand: HAND_KO[inp.hand], grip: GRIP_KO[inp.grip], exp: EXP_KO[inp.exp], styles: STYLE_SHORT(inp.styles), used: inp.used || "", usedFeel: inp.used ? (inp.usedFeel === "like" ? "만족" : "바꾸고 싶음") : "", hasReview: !!inp.review, env: ENV_KO[inp.env], cycle: CYCLE_KO[inp.cycle], curT: inp.curT || "", budget: inp.budget ? BUDGET_KO(inp.budget) : "" } : null,
     review: (inp.review || "").slice(0, 500),
     top3: lastRun?.top3 || [], strings: lastRun?.strings || [], tension: lastRun?.tension || "",
-    specAI: !!lastRun?.specAI, explainAI: !!lastRun?.explainAI,
+    specAI: !!lastRun?.specAI, specMode: lastRun?.specMode || "", explainAI: !!lastRun?.explainAI,
+    specText: (lastRun?.specText || "").slice(0, 1200), explainText: (lastRun?.explainText || "").slice(0, 2000),
   };
   if (!entry.fit || !entry.clear || !entry.aiu || !entry.easy || !entry.try) { $("fb-status").textContent = "1~5번 점수를 모두 골라 주세요."; return; }
   if (!$("fb-consent").checked) { $("fb-status").textContent = "맨 아래 동의에 체크해 주세요."; return; }
